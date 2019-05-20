@@ -4,5 +4,8 @@
     "main": "index.js",
     "repository": "https://github.com/pat-pyschographic-analysis-of-text/Backend.git",
     "author": "Timothy Shores",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "pg": "^7.11.0"
+    }
 }
