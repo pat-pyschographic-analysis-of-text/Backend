@@ -1,6 +1,6 @@
 exports.up = function (knex, Promise) {
     return knex.schema
-        .createTable('suggestions', tbl => {
+        .createTable('values', tbl => {
             tbl.increments();
             tbl.integer('user_id')
                 .unsigned()
@@ -9,12 +9,15 @@ exports.up = function (knex, Promise) {
                 .inTable('users')
                 .onDelete('RESTRICT')
                 .onUpdate('CASCADE');
-            tbl.string('twitter_handle');
-            tbl.float('score');
+            tbl.float('conservation');
+            tbl.float('openness');
+            tbl.float('hedonism');
+            tbl.float('self_enhancement');
+            tbl.float('self_transcendence');
         })
 };
 
 exports.down = function (knex, Promise) {
     return knex.schema
-        .dropTableIfExists('suggestions')
+        .dropTableIfExists('values')
 };
