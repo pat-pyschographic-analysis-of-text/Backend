@@ -1,0 +1,8 @@
+{
+    "name": "Backend",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/pat-pyschographic-analysis-of-text/Backend.git",
+    "author": "Timothy Shores",
+    "license": "MIT"
+}
