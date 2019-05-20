@@ -1,6 +1,13 @@
 const router = require('express').Router();
 const Users = require('./users-model');
 
+router.get('/', (req, res) => {
+    const message500 = { message: 'Unable to get users' };
+    Users.getUsers()
+        .then(users => { res.status(200).json(users); })
+        .catch(error => { res.status(500).json(message500); });
+});
+
 router.post('/', (req, res) => {
     const { name, description } = req.body;
     const message400 = { error: "Please provide a name and password for the user" }
