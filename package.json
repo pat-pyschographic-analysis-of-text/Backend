@@ -5,6 +5,11 @@
     "repository": "https://github.com/pat-pyschographic-analysis-of-text/Backend.git",
     "author": "Timothy Shores",
     "license": "MIT",
+    "scripts": {
+        "start": "node index.js",
+        "server": "nodemon index.js",
+        "test": "cross-env DB_ENV=testing jest --watch"
+    },
     "dependencies": {
         "dotenv": "^8.0.0",
         "helmet": "^3.18.0",
