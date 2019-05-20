@@ -6,6 +6,7 @@
     "author": "Timothy Shores",
     "license": "MIT",
     "dependencies": {
+        "dotenv": "^8.0.0",
         "pg": "^7.11.0"
     }
 }
