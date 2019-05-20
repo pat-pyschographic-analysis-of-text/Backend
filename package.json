@@ -8,9 +8,10 @@
     "scripts": {
         "start": "node index.js",
         "server": "nodemon index.js",
-        "test": "cross-env DB_ENV=testing jest --watch"
+        "test": "jest --watch --verbose"
     },
     "dependencies": {
+        "cors": "^2.8.5",
         "dotenv": "^8.0.0",
         "helmet": "^3.18.0",
         "knex": "^0.16.5",
