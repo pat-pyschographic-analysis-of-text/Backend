@@ -9,7 +9,7 @@ exports.up = function (knex, Promise) {
                 .inTable('users')
                 .onDelete('RESTRICT')
                 .onUpdate('CASCADE');
-            tbl.float('twitter_handle');
+            tbl.string('twitter_handle');
         })
 };
 
