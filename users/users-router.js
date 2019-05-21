@@ -26,8 +26,7 @@ router.get('/:id', (req, res) => {
                 .then(personality => {
                     Needs.getNeedsById(id)
                         .then(needs => {
-                            console.log('needs', needs)
-                            res.status(200).json({...user, personality, needs })
+                            res.status(200).json({ ...user, personality, needs })
                         })
                         .catch(error => { res.status(404).json(needs404) });
                 })
