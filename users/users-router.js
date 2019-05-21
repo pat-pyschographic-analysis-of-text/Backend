@@ -58,7 +58,7 @@ router.post('/register', (req, res) => {
         Users.addUser({ username, password: hash, twitter_handle })
             .then(user => {
                 const token = generateToken(user);
-                res.status(201).json({ user, token });
+                res.status(201).json({ id: user.id, username, token });
             })
             .catch(error => {
                 console.log(error);
@@ -109,6 +109,29 @@ router.delete('/:id', (req, res) => {
         .catch(err => {
             res.status(500).json(err);
         });
+});
+
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const { text, password, twitter_handle } = req.body;
+
+    const message400 = { error: `Please provide text, password and twitter_handle` };
+    const message404 = { error: `User id: ${id} does not exist` };
+    const message500 = { error: `User id: ${id} could not be removed` };
+
+    if (text === '' || user_id === '') {
+        res.status(400).json(message400);
+    }
+    else {
+        Users
+            .update(id, { text, password, twitter_handle })
+            .then(response => {
+                response === 1
+                    ? res.status(200).json(response)
+                    : res.status(404).json(message404)
+            })
+            .catch(error => { res.status(500).json(message500) });
+    }
 });
 
 function generateToken(user) {

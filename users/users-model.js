@@ -31,3 +31,7 @@ function removeUser(id) {
         .where({ id: id })
         .del()
 }
+
+function update(id) {
+    
+}
