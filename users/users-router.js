@@ -14,16 +14,16 @@ router.get('/', (req, res) => {
         .catch(error => { res.status(500).json(message500); });
 });
 
-router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    const personality404 = { error: `The user id: ${id} does not have a personality table.` };
-    const needs404 = { error: `The user id: ${id} does not have a needs table.` };
-    const values404 = { error: `The user id: ${id} does not have a values table.` };
-    const message500 = { error: "The user information could not be retrieved." };
-    ;
-    Users
-        .getById(id)
+router.get('/:username', (req, res) => {
+    const username = req.params.username;
+    const personality404 = { error: `Username ${username} does not have a personality table.` };
+    const needs404 = { error: `Username ${username} does not have a needs table.` };
+    const values404 = { error: `Username ${username} does not have a values table.` };
+    const message500 = { error: `Username ${username} could not be retrieved.` };
+
+    Users.getByUsername(username)
         .then(user => {
+            const id = user.id;
             Personality.getPersonalityById(id)
                 .then(personality => {
                     Needs.getNeedsById(id)
@@ -50,7 +50,6 @@ router.get('/personality', (req, res) => {
 
 router.post('/register', (req, res) => {
     let user = req.body;
-    console.log('user', user)
     let { username, password, twitter_handle } = user;
     const hash = bcrypt.hashSync(user.password, 10);
     user.password = hash;
@@ -73,16 +72,19 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     let { username, password } = req.body;
 
-    Users.getByUsername({ username })
+    Users.getByUsername(username)
         .first()
         .then(user => {
             if (user && bcrypt.compareSync(password, user.password)) {
                 const token = generateToken(user);
                 res.status(200).json({
                     message: `Welcome ${user.username}!`,
+                    userId: user.id,
+                    username: user.username,
                     token,
                 });
-            } else {
+            }
+            else {
                 res.status(401).json({ message: 'Invalid Credentials' });
             }
         })
