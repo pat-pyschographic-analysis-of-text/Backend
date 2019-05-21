@@ -6,42 +6,45 @@ exports.seed = function (knex, Promise) {
         .then(function () {
             return knex('users').insert([
                 {
-                    userName: 'admin',
-                    password: bcrypt.hashSync("admin", 10)
+                    userName: 'austen',
+                    password: bcrypt.hashSync("austen", 10)
                 },
                 {
-                    userName: 'tim',
-                    password: bcrypt.hashSync("tim", 10)
+                    userName: 'ryanallred',
+                    password: bcrypt.hashSync("ryanallred", 10)
                 },
                 {
-                    userName: 'clint',
-                    password: bcrypt.hashSync("clint", 10)
+                    userName: 'ryanherr',
+                    password: bcrypt.hashSync("ryanherr", 10)
                 },
                 {
-                    userName: 'kimberlee',
-                    password: bcrypt.hashSync("kimberlee", 10)
+                    userName: 'garyvee',
+                    password: bcrypt.hashSync("garyvee", 10)
                 },
                 {
-                    userName: 'jay',
-                    password: bcrypt.hashSync("jay", 10)
+                    userName: 'guidoVanRossum',
+                    password: bcrypt.hashSync("guidoVanRossum", 10)
                 },
                 {
-                    userName: 'dmitriy',
-                    password: bcrypt.hashSync("dmitriy", 10)
+                    userName: 'Siraj',
+                    password: bcrypt.hashSync("Siraj", 10)
                 },
                 {
-                    userName: 'cole',
-                    password: bcrypt.hashSync("cole", 10)
+                    userName: 'trump',
+                    password: bcrypt.hashSync("trump", 10)
                 },
                 {
-                    userName: 'peter',
-                    password: bcrypt.hashSync("peter", 10)
+                    userName: 'rivatez',
+                    password: bcrypt.hashSync("rivatez", 10)
                 },
                 {
-                    userName: 'gerard',
-                    password: bcrypt.hashSync("gerard", 10)
+                    userName: 'farnamstreet',
+                    password: bcrypt.hashSync("farnamstreet", 10)
                 },
-
+                {
+                    userName: 'BarackObama',
+                    password: bcrypt.hashSync("BarackObama", 10)
+                },
             ]);
         });
 };
