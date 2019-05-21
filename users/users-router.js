@@ -23,12 +23,12 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const { name, description } = req.body;
+    const { username, password, twitter_handle } = req.body;
     const message400 = { error: "Please provide a name and password for the user" }
     const message500 = { error: "There was an error while saving the user to the database" };
 
-    if (name && description) {
-        Users.addUser({ username, passowrd })
+    if (username && password) {
+        Users.addUser({ username, password, twitter_handle })
             .then(user => { res.status(201).json(user) })
             .catch(err => { res.status(500).json(message500) })
     }
