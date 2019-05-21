@@ -7,7 +7,7 @@ exports.up = function (knex, Promise) {
                 .notNullable()
                 .references('id')
                 .inTable('users')
-                .onDelete('RESTRICT')
+                .onDelete('CASCADE')
                 .onUpdate('CASCADE');
             tbl.string('twitter_handle');
             tbl.float('score');
