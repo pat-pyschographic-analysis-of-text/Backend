@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Users = require('./users-model');
+const Personality = require('./personality-model');
 
 router.get('/', (req, res) => {
     const message500 = { message: 'Unable to get users' };
@@ -12,21 +13,32 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+    const id = req.params.id;
     const message404 = { error: "The user with the specified ID does not exist." }
     const message500 = { error: "The user information could not be retrieved." }
 
     Users
-        .getById(req.params.id)
+        .getById(id)
         .then(user => {
-            user
-                ? res.status(200).json(user)
-                : res.status(404).json(message404);
+            Personality.getPersonalityById(id)
+                .then(personality => {
+                    res.status(200).json({ ...user, personality })
+                })
+                .catch(error => { res.status(404).json(message500); });
         })
         .catch(err => { res.status(500).json(message500) })
 });
 
+router.get('/personality', (req, res) => {
+    const message500 = { message: 'Unable to get personality table' };
+    Personality.getPersonality()
+        .then(personality => { res.status(200).json(personality); })
+        .catch(error => { res.status(500).json(message500); });
+});
+
 router.post('/register', (req, res) => {
     let user = req.body;
+    console.log('user', user)
     let { username, password, twitter_handle } = user;
     const hash = bcrypt.hashSync(user.password, 10);
     user.password = hash;
@@ -84,7 +96,6 @@ router.delete('/:id', (req, res) => {
             res.status(500).json(err);
         });
 });
-
 
 function generateToken(user) {
     const payload = {
