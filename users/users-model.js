@@ -4,7 +4,8 @@ module.exports = {
     getUsers,
     getByUsername,
     getById,
-    addUser
+    addUser,
+    removeUser
 };
 
 function getUsers() {
@@ -23,4 +24,10 @@ function addUser(user) {
     return db('users')
         .insert(user)
         .then(ids => ({ id: ids[0] }));
+}
+
+function removeUser(id) {
+    return db('users')
+        .where({ id: id })
+        .del()
 }

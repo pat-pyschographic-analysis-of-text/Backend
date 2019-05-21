@@ -68,6 +68,22 @@ router.post('/login', (req, res) => {
         });
 });
 
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    const message200 = { message: `User id: ${id} was successfully deleted` }
+    const message404 = { message: `User id: ${id} does not exist` }
+
+    Users
+        .removeUser(id)
+        .then(count => {
+            count > 0
+                ? res.status(200).json(message200)
+                : res.status(404).json(message404)
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
 
 
 function generateToken(user) {
