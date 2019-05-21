@@ -11,7 +11,7 @@ function getUsers() {
 }
 
 function getUser(id) {
-    return db('actions').where({ id }).first();
+    return db('users').where({ id }).first();
 }
 
 function addUser(user) {
