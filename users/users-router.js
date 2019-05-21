@@ -25,21 +25,6 @@ router.get('/:id', (req, res) => {
         .catch(err => { res.status(500).json(message500) })
 });
 
-router.post('/', (req, res) => {
-    const { username, password, twitter_handle } = req.body;
-    const message400 = { error: "Please provide a name and password for the user" }
-    const message500 = { error: "There was an error while saving the user to the database" };
-
-    if (username && password) {
-        Users.addUser({ username, password, twitter_handle })
-            .then(user => { res.status(201).json(user) })
-            .catch(err => { res.status(500).json(message500) })
-    }
-    else {
-        res.status(400).json(message400);
-    }
-});
-
 router.post('/register', (req, res) => {
     let user = req.body;
     let { username, password, twitter_handle } = user;
@@ -47,7 +32,7 @@ router.post('/register', (req, res) => {
     user.password = hash;
 
     if (username && password) {
-        Users.addUser({ username, password, twitter_handle })
+        Users.addUser({ username, password: hash, twitter_handle })
             .then(user => {
                 const token = generateToken(user);
                 res.status(201).json({ user, token });
@@ -60,6 +45,30 @@ router.post('/register', (req, res) => {
         res.status(500).json({ message: "User requires a username and password" });
     }
 });
+
+router.post('/login', (req, res) => {
+    let { username, password } = req.body;
+
+    Users.getByUsername({ username })
+        .first()
+        .then(user => {
+            if (user && bcrypt.compareSync(password, user.password)) {
+                const token = generateToken(user);
+                res.status(200).json({
+                    message: `Welcome ${user.username}!`,
+                    token,
+                });
+            } else {
+                res.status(401).json({ message: 'Invalid Credentials' });
+            }
+        })
+        .catch(error => {
+            console.log('error', error);
+            res.status(500).json(error);
+        });
+});
+
+
 
 function generateToken(user) {
     const payload = {
