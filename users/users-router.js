@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const Users = require('./users-model');
 const Personality = require('./personality-model');
 const Needs = require('./needs-model');
+const Values = require('./values-model');
 
 router.get('/', (req, res) => {
     const message500 = { message: 'Unable to get users' };
@@ -15,10 +16,11 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
-    const personality404 = { error: `The user id: ${id} does not have a personality table.` }
-    const needs404 = { error: `The user id: ${id} does not have a needs table.` }
-    const message500 = { error: "The user information could not be retrieved." }
-
+    const personality404 = { error: `The user id: ${id} does not have a personality table.` };
+    const needs404 = { error: `The user id: ${id} does not have a needs table.` };
+    const values404 = { error: `The user id: ${id} does not have a values table.` };
+    const message500 = { error: "The user information could not be retrieved." };
+    ;
     Users
         .getById(id)
         .then(user => {
@@ -26,7 +28,11 @@ router.get('/:id', (req, res) => {
                 .then(personality => {
                     Needs.getNeedsById(id)
                         .then(needs => {
-                            res.status(200).json({ ...user, personality, needs })
+                            Values.getValuesById(id)
+                                .then(values => {
+                                    res.status(200).json({ ...user, personality, needs, values })
+                                })
+                                .catch(error => { res.status(404).json(values404) });
                         })
                         .catch(error => { res.status(404).json(needs404) });
                 })
