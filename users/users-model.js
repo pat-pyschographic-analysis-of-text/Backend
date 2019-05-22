@@ -5,7 +5,8 @@ module.exports = {
     getByUsername,
     getById,
     addUser,
-    removeUser
+    removeUser,
+    update
 };
 
 function getUsers() {
@@ -32,6 +33,8 @@ function removeUser(id) {
         .del()
 }
 
-function update(id) {
-    
+function update(id, changes) {
+    return db('users')
+        .where({ id })
+        .update(changes);
 }

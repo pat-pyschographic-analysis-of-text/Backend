@@ -112,25 +112,36 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const { text, password, twitter_handle } = req.body;
+    const id = req.params.id;
+    const username = req.body.username;
+    const password = req.body.password;
+    const twitter_handle = req.body.twitter_handle
 
-    const message400 = { error: `Please provide text, password and twitter_handle` };
+    const message400 = { error: `Please provide username, password and twitter_handle` };
     const message404 = { error: `User id: ${id} does not exist` };
-    const message500 = { error: `User id: ${id} could not be removed` };
+    const message500 = { error: `User id: ${id} could not be updated. Please provide username, password and twitter_handle` };
 
-    if (text === '' || user_id === '') {
+    if (username === '' || password === '' || twitter_handle === '') {
         res.status(400).json(message400);
     }
     else {
         Users
-            .update(id, { text, password, twitter_handle })
+            .update(id, { username, password, twitter_handle })
             .then(response => {
-                response === 1
-                    ? res.status(200).json(response)
-                    : res.status(404).json(message404)
+                if (response === 1) {
+                    Users.getById(id)
+                        .then(user => {
+                            const { id, username, twitter_handle } = user;
+                            res.status(200).json({ id, username, twitter_handle });
+                        })
+                        .catch(error => { res.status(404).json(values404) });
+                } else {
+                    res.status(404).json(message404)
+                }
             })
-            .catch(error => { res.status(500).json(message500) });
+            .catch(error => {
+                res.status(500).json(message500)
+            });
     }
 });
 
