@@ -14,7 +14,7 @@ function getUsers() {
 }
 
 function getByUsername(username) {
-    return db('users').where({ username: username }).first();;
+    return db('users').where({ username: username }).first();
 }
 
 function getById(id) {
