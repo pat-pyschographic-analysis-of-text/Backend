@@ -6,6 +6,7 @@ const Users = require('./users-model');
 const Personality = require('./personality-model');
 const Needs = require('./needs-model');
 const Values = require('./values-model');
+const Favorites = require('./favorites-model');
 
 router.get('/', (req, res) => {
     const message500 = { message: 'Unable to get users' };
@@ -19,6 +20,7 @@ router.get('/:username', (req, res) => {
     const personality404 = { error: `Username ${username} does not have a personality table.` };
     const needs404 = { error: `Username ${username} does not have a needs table.` };
     const values404 = { error: `Username ${username} does not have a values table.` };
+    const favorites404 = { error: `Username ${username} does not have a favorites table.` };
     const message500 = { error: `Username ${username} could not be retrieved.` };
 
     Users.getByUsername(username)
@@ -64,12 +66,20 @@ router.get('/:username', (req, res) => {
                                             self_transcendence: values.self_transcendence,
                                         }
                                     };
-                                    res.status(200).json({
-                                        ...user,
-                                        ...filtedPersonality,
-                                        ...filtedNeeds,
-                                        ...filtedValues
-                                    })
+                                    Favorites.getFavorites()
+                                        .then(favorites => {
+                                            const userFavorites = favorites.filter(favorite => favorite.user_id === id);
+                                            const filteredFavorites = { favorites: userFavorites.map(favorite => favorite.twitter_handle) };
+
+                                            res.status(200).json({
+                                                ...user,
+                                                ...filtedPersonality,
+                                                ...filtedNeeds,
+                                                ...filtedValues,
+                                                ...filteredFavorites
+                                            })
+                                        })
+                                        .catch(error => { res.status(404).json(favorites404) });
                                 })
                                 .catch(error => { res.status(404).json(values404) });
                         })
