@@ -1,4 +1,4 @@
-const db = require('../data/dbConfig');
+const db = require('../dbConfig');
 
 module.exports = {
     getFavorites,
@@ -24,4 +24,3 @@ function addFavorite(twitter_handle) {
         .insert(twitter_handle)
         .then(ids => ({ id: ids[0] }));
 }
-
