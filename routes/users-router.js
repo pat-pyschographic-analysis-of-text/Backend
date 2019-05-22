@@ -138,7 +138,7 @@ router.post('/login', (req, res) => {
 
 router.post('/:id/favorites/', (req, res) => {
     const twitter_handle = req.body.twitter_handle;
-    const message400 = { error: "Please provide twitter_handle for the dish" }
+    const message400 = { error: "Please provide twitter_handle for the favorite" }
     const message500 = { error: "There was an error saving the favorite to the database" };
 
 
@@ -172,25 +172,24 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     const id = req.params.id;
     const username = req.body.username;
-    const password = req.body.password;
-    const twitter_handle = req.body.twitter_handle
 
-    const message400 = { error: `Please provide username, password and twitter_handle` };
+    const message400 = { error: `Please provide username and twitter_handle` };
     const message404 = { error: `User id: ${id} does not exist` };
     const message500 = { error: `User id: ${id} could not be updated. Please provide username, password and twitter_handle` };
 
-    if (username === '' || password === '' || twitter_handle === '') {
+    if (username === '') {
         res.status(400).json(message400);
     }
     else {
         Users
-            .update(id, { username, password, twitter_handle })
+            .update(id, { username })
             .then(response => {
+                console.log(response);
                 if (response === 1) {
                     Users.getById(id)
                         .then(user => {
-                            const { id, username, twitter_handle } = user;
-                            res.status(200).json({ id, username, twitter_handle });
+                            const { username } = user;
+                            res.status(200).json({ username });
                         })
                         .catch(error => { res.status(404).json(values404) });
                 } else {
