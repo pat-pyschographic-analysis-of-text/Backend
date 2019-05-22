@@ -2,11 +2,11 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const Users = require('./users-model');
-const Personality = require('./personality-model');
-const Needs = require('./needs-model');
-const Values = require('./values-model');
-const Favorites = require('./favorites-model');
+const Users = require('../users/users-model');
+const Personality = require('../users/personality-model');
+const Needs = require('../users/needs-model');
+const Values = require('../users/values-model');
+const Favorites = require('../users/favorites-model');
 
 router.get('/', (req, res) => {
     const message500 = { message: 'Unable to get users' };
@@ -90,13 +90,6 @@ router.get('/:username', (req, res) => {
         .catch(err => { res.status(500).json(message500) })
 });
 
-router.get('/personality', (req, res) => {
-    const message500 = { message: 'Unable to get personality table' };
-    Personality.getPersonality()
-        .then(personality => { res.status(200).json(personality); })
-        .catch(error => { res.status(500).json(message500); });
-});
-
 router.post('/register', (req, res) => {
     let user = req.body;
     let { username, password, twitter_handle } = user;
@@ -141,6 +134,9 @@ router.post('/login', (req, res) => {
             console.log('error', error);
             res.status(500).json(error);
         });
+});
+
+router.post('/favorites/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
