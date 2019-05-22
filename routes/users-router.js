@@ -2,11 +2,11 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const Users = require('../users/users-models-model');
-const Personality = require('../users/personality-modely-model');
-const Needs = require('../users/needs-models-model');
-const Values = require('../users/values-models-model');
-const Favorites = require('../users/favorites-models-model');
+const Users = require('../users/users-model');
+const Personality = require('../users/personality-model');
+const Needs = require('../users/needs-model');
+const Values = require('../users/values-model');
+const Favorites = require('../users/favorites-model');
 
 router.get('/', (req, res) => {
     const message500 = { message: 'Unable to get users' };

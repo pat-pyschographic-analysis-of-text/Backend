@@ -4,16 +4,14 @@ const helmet = require('helmet');
 
 const server = express();
 
-const usersRouter = require('./users/users-router');
+const usersRouter = require('./routes/users-router');
+const apiRouter = require('./routes/api-router');
 
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
-server.get('/', async (req, res) => {
-    res.status(200).json({ message: 'Hello World!' });
-});
-
 server.use('/users', usersRouter);
+server.use('/api/users', apiRouter);
 
 module.exports = server;
