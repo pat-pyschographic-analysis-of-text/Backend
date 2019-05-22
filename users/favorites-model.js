@@ -3,7 +3,8 @@ const db = require('../data/dbConfig');
 module.exports = {
     getFavorites,
     getFavoritesBy,
-    getFavoritesById
+    getFavoritesById,
+    addFavorite
 };
 
 function getFavorites() {
@@ -17,3 +18,10 @@ function getFavoritesBy(filter) {
 function getFavoritesById(id) {
     return db('favorites').where({ id }).first();
 }
+
+function addFavorite(twitter_handle) {
+    return db('favorites')
+        .insert(twitter_handle)
+        .then(ids => ({ id: ids[0] }));
+}
+
