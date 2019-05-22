@@ -26,11 +26,50 @@ router.get('/:username', (req, res) => {
             const id = user.id;
             Personality.getPersonalityById(id)
                 .then(personality => {
+                    const filtedPersonality = {
+                        personality: {
+                            openness: personality.openness,
+                            conscientiousness: personality.conscientiousness,
+                            extraversion: personality.extraversion,
+                            agreeableness: personality.agreeableness,
+                            emotional: personality.emotional,
+                        }
+                    };
                     Needs.getNeedsById(id)
                         .then(needs => {
+                            const filtedNeeds = {
+                                needs: {
+                                    challenge: needs.challenge,
+                                    closeness: needs.closeness,
+                                    curiosity: needs.curiosity,
+                                    excitement: needs.excitement,
+                                    harmony: needs.harmony,
+                                    ideal: needs.ideal,
+                                    liberty: needs.liberty,
+                                    love: needs.love,
+                                    practicality: needs.practicality,
+                                    self_expression: needs.self_expression,
+                                    stability: needs.stability,
+                                    structure: needs.structure,
+                                }
+                            };
                             Values.getValuesById(id)
                                 .then(values => {
-                                    res.status(200).json({ ...user, personality, needs, values })
+                                    const filtedValues = {
+                                        values: {
+                                            conservation: values.conservation,
+                                            openness: values.openness,
+                                            hedonism: values.hedonism,
+                                            self_enhancement: values.self_enhancement,
+                                            self_transcendence: values.self_transcendence,
+                                        }
+                                    };
+                                    res.status(200).json({
+                                        ...user,
+                                        ...filtedPersonality,
+                                        ...filtedNeeds,
+                                        ...filtedValues
+                                    })
                                 })
                                 .catch(error => { res.status(404).json(values404) });
                         })
