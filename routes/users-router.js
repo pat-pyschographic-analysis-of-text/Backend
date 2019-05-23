@@ -8,7 +8,7 @@ const Needs = require('../data/models/needs-model');
 const Values = require('../data/models/values-model');
 const Favorites = require('../data/models/favorites-model');
 
-router.get('/', checkJWT, (req, res) => {
+router.get('/', checkIfAdmin, (req, res) => {
     const message500 = { message: 'Unable to get users' };
     Users.getUsers()
         .then(users => { res.status(200).json(users); })
@@ -232,8 +232,23 @@ function checkJWT(req, res, next) {
         if (err) {
             res.status(401).json({ error: "Invalid token" })
         } else {
-            req.decodedToken = decodedToken;
             next();
+        }
+    });
+}
+
+function checkIfAdmin(req, res, next) {
+    const token = req.headers.authorization;
+    const secret = process.env.JWT_SECRET;
+
+    jwt.verify(token, secret, (err, decodedToken) => {
+        if (err) {
+            res.status(401).json({ error: "Invalid token" })
+        } else {
+            req.decodedToken = decodedToken;
+            req.decodedToken.username === 'admin'
+                ? next()
+                : res.status(401).json({ error: "Not logged in as admin" })
         }
     });
 }

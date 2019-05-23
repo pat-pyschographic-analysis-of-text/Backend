@@ -2,13 +2,21 @@ const router = require('express').Router();
 const axios = require('axios');
 
 router.get('/:username/all', (req, res) => {
-    axios.post("https://mif88l63ba.execute-api.us-west-2.amazonaws.com/default/personality-score", { headers: { accept: 'application/json' }, username: req.params.username })
+    axios.post("https://mif88l63ba.execute-api.us-west-2.amazonaws.com/default/personality-score",
+        {
+            headers: { accept: 'application/json' },
+            username: req.params.username
+        })
         .then(response => res.status(200).json(response.data))
         .catch(err => res.status(500).json(err.response));
 });
 
 router.get('/:username', (req, res) => {
-    axios.post("https://mif88l63ba.execute-api.us-west-2.amazonaws.com/default/personality-score", { headers: { accept: 'application/json' }, username: req.params.username })
+    axios.post("https://mif88l63ba.execute-api.us-west-2.amazonaws.com/default/personality-score",
+        {
+            headers: { accept: 'application/json' },
+            username: req.params.username
+        })
         .then(response => {
             res.status(200).json({
                 username: response.data.username,
@@ -44,6 +52,17 @@ router.get('/:username', (req, res) => {
                 }
             })
         })
+        .catch(err => res.status(500).json(err.response));
+});
+
+router.post('/reccomendations', (req, res) => {
+    axios
+        .post("https://du5jeazas5.execute-api.us-west-2.amazonaws.com/default/twitter-user-recommendation",
+            {
+                headers: { accept: "application/json" },
+                usernames: req.body.usernames
+            })
+        .then(response => res.status(200).json(response.data))
         .catch(err => res.status(500).json(err.response));
 });
 
