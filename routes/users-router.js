@@ -8,7 +8,7 @@ const Needs = require('../data/models/needs-model');
 const Values = require('../data/models/values-model');
 const Favorites = require('../data/models/favorites-model');
 
-router.get('/', (req, res) => {
+router.get('/', checkJWT, (req, res) => {
     const message500 = { message: 'Unable to get users' };
     Users.getUsers()
         .then(users => { res.status(200).json(users); })
@@ -222,6 +222,20 @@ function generateToken(user) {
     const secret = process.env.JWT_SECRET;
 
     return jwt.sign(payload, secret, options)
+}
+
+function checkJWT(req, res, next) {
+    const token = req.headers.authorization;
+    const secret = process.env.JWT_SECRET;
+
+    jwt.verify(token, secret, (err, decodedToken) => {
+        if (err) {
+            res.status(401).json({ error: "Invalid token" })
+        } else {
+            req.decodedToken = decodedToken;
+            next();
+        }
+    });
 }
 
 module.exports = router;
