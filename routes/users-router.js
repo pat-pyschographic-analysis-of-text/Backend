@@ -26,6 +26,10 @@ router.get('/:username', (req, res) => {
     Users.getByUsername(username)
         .then(user => {
             const id = user.id;
+            const filteredUser = {
+                id: user.id,
+                username: user.username,
+            }
             Personality.getPersonalityById(id)
                 .then(personality => {
                     const filtedPersonality = {
@@ -72,7 +76,7 @@ router.get('/:username', (req, res) => {
                                             const filteredFavorites = { favorites: userFavorites.map(favorite => favorite.twitter_handle) };
 
                                             res.status(200).json({
-                                                ...user,
+                                                ...filteredUser,
                                                 ...filtedPersonality,
                                                 ...filtedNeeds,
                                                 ...filtedValues,
@@ -96,18 +100,18 @@ router.post('/register', (req, res) => {
     const hash = bcrypt.hashSync(user.password, 10);
     user.password = hash;
 
-    if (username && password) {
+    if (username && password && twitter_handle) {
         Users.addUser({ username, password: hash, twitter_handle })
             .then(user => {
                 const token = generateToken(user);
-                res.status(201).json({ id: user.id, username, token });
+                res.status(201).json({ id: user.id, username, twitter_handle, token });
             })
             .catch(error => {
                 console.log(error);
                 res.status(500).json(error);
             });
     } else {
-        res.status(500).json({ message: "User requires a username and password" });
+        res.status(500).json({ message: "User requires a username, password and twitter_handle" });
     }
 });
 
@@ -123,6 +127,7 @@ router.post('/login', (req, res) => {
                     message: `Welcome ${user.username}!`,
                     userId: user.id,
                     username: user.username,
+                    twitter_handle: user.twitter_handle,
                     token,
                 });
             }
@@ -172,6 +177,7 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     const id = req.params.id;
     const username = req.body.username;
+    const twitter_handle = req.body.twitter_handle;
 
     const message400 = { error: `Please provide username and twitter_handle` };
     const message404 = { error: `User id: ${id} does not exist` };
@@ -182,14 +188,14 @@ router.put('/:id', (req, res) => {
     }
     else {
         Users
-            .update(id, { username })
+            .update(id, { username, twitter_handle })
             .then(response => {
                 console.log(response);
                 if (response === 1) {
                     Users.getById(id)
                         .then(user => {
-                            const { username } = user;
-                            res.status(200).json({ username });
+                            const { username, twitter_handle } = user;
+                            res.status(200).json({ username, twitter_handle });
                         })
                         .catch(error => { res.status(404).json(values404) });
                 } else {

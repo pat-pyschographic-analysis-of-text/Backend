@@ -11,6 +11,8 @@ router.get('/:username', (req, res) => {
     axios.post("https://mif88l63ba.execute-api.us-west-2.amazonaws.com/default/personality-score", { headers: { accept: 'application/json' }, username: req.params.username })
         .then(response => {
             res.status(200).json({
+                username: response.data.username,
+                image_url: response.data.image_url,
                 word_count: response.data.word_count,
                 personality: {
                     openness: response.data.personality[0].raw_score,
@@ -41,8 +43,8 @@ router.get('/:username', (req, res) => {
                     self_transcendence: response.data.values[4].raw_score,
                 }
             })
-})
-    .catch(err => res.status(500).json(err.response));
+        })
+        .catch(err => res.status(500).json(err.response));
 });
 
 module.exports = router;
