@@ -8,7 +8,8 @@ const Needs = require('../data/models/needs-model');
 const Values = require('../data/models/values-model');
 const Favorites = require('../data/models/favorites-model');
 
-router.get('/', checkIfAdmin, (req, res) => {
+// router.get('/', checkIfAdmin, (req, res) => {
+router.get('/', (req, res) => {
     const message500 = { message: 'Unable to get users' };
     Users.getUsers()
         .then(users => { res.status(200).json(users); })

@@ -66,4 +66,10 @@ router.post('/reccomendations', (req, res) => {
         .catch(err => res.status(500).json(err.response));
 });
 
+router.get('/graphs/:username', (req, res) => {
+    axios.get(`http://flask-env.rev4wnmkiv.us-east-2.elasticbeanstalk.com/${req.params.username}`)
+        .then(response => res.status(200).json(response.data))
+        .catch(err => res.status(500).json(err.response));
+});
+
 module.exports = router;
